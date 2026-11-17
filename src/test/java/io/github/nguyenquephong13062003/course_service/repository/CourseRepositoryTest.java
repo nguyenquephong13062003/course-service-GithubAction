@@ -73,11 +73,11 @@ class CourseRepositoryTest {
 
     @Test
     void duplicateTitle_violatesUniqueConstraint() {
-        repository.save(newCourse("Java cơ bản"));
-        repository.save(newCourse("Java cơ bản"));
+        repository.saveAndFlush(newCourse("Java cơ bản"));
+        Course duplicate = newCourse("Java cơ bản");
 
-        assertThatThrownBy(em::flush).isInstanceOfAny(DataIntegrityViolationException.class,
-                jakarta.persistence.PersistenceException.class);
+        assertThatThrownBy(() -> repository.saveAndFlush(duplicate))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
