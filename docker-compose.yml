@@ -1,0 +1,18 @@
+services:
+  course-service:
+    build: .
+    image: course-service:latest
+    container_name: course-service
+    ports:
+      - "8080:8080"
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx512m"
+      # Muốn tắt H2 console khi chạy bằng Docker thì bỏ comment dòng dưới:
+      # SPRING_H2_CONSOLE_ENABLED: "false"
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+    restart: unless-stopped
